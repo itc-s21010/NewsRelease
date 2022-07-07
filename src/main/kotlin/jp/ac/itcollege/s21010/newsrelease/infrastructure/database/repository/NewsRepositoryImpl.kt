@@ -14,12 +14,12 @@ class NewsRepositoryImpl(
     private val newsWithCategoryMapper: NewsWithCategoryMapper,
     private val newsMapper: NewsMapper
 )  : NewsRepository {
-    override fun findAllwithCategory(): List<NewsWithCategoryModel> {
-        return newsWithCategoryMapper.select{ }.map { toModel(it) }
+    override fun findAllWithCategory(): List<NewsWithCategoryModel> {
+        return newsWithCategoryMapper.select {  }.map { toModel(it) }
     }
 
     override fun findWithCategory(id: Long): NewsWithCategoryModel? {
-        return newsWithCategoryMapper.selectByPrimarykey(id)?.let { toModel(it) }
+        return newsWithCategoryMapper.selectByPrimaryKey(id)?.let { toModel(it) }
     }
 
     override fun register(news: News) {

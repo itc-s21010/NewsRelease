@@ -2,7 +2,8 @@ package jp.ac.itcollege.s21010.newsrelease.infrastructure.database.record
 
 import java.sql.Timestamp
 
-    data class NewsWithCategory(
+
+data class NewsWithCategory(
         val id: Long? = null,
         val title: String? = null,
         val categoryId: Long? = null,

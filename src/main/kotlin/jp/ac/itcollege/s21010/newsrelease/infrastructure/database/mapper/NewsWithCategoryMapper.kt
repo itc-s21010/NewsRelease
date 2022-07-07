@@ -18,6 +18,9 @@ import org.apache.ibatis.annotations.SelectProvider
 import org.apache.ibatis.type.JdbcType
 import org.mybatis.dynamic.sql.select.render.SelectStatementProvider
 import org.mybatis.dynamic.sql.util.SqlProviderAdapter
+import org.mybatis.dynamic.sql.util.kotlin.mybatis3.select
+import org.mybatis.dynamic.sql.util.kotlin.SelectCompleter
+
 
 @Mapper
 interface NewsWithCategoryMapper {
@@ -43,12 +46,21 @@ interface NewsWithCategoryMapper {
 
 private val columnList = listOf(id, title, categoryId, createAt, publishAt, userId, body)
 
-fun NewsWithCategoryMapper.select(): List<NewsWithCategory> =
+fun NewsWithCategoryMapper.select(completer: SelectCompleter): List<NewsWithCategory> =
     select(columnList) {
         from(news, "n")
         leftJoin(category) {
-            on(news, "n") equalTo category.id
+            on(news.id) equalTo category.id
         }
+        completer()
     }.run(this::selectMany)
 
-fun NewsWithCategoryMapper.selectByPrimarykey(id_:Long): NewsWithCategory?
+fun NewsWithCategoryMapper.selectByPrimaryKey(id_:Long): NewsWithCategory? = select(columnList) {
+    from(news, "n")
+    leftJoin(category, "c") {
+        on(news.id) equalTo category.id
+    }
+    where {
+        id isEqualTo id_
+    }
+}.run ( this::selectOne )
